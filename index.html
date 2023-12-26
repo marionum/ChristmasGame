@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-    <title>Hangman &copy; Adnan</title>
+    <title>Hangman game</title>
 
     <style>
         body{
@@ -201,11 +201,11 @@
 
 <main>
     <!--Welcome-->
-    <h1>Hangman Spiel</h1>
+    <h1>Hangman game </h1>
     <hr>
 
     <p>
-        Das Hangman Challenge ist ein spannendes Worträtselspiel, bei dem du ein geheimes Wort erraten musst, indem du die Buchstaben auswählst. Du hast nur begrenzte Versuche und begrenzte Zeit, bevor der Galgenmann vollständig gezeichnet ist. Fordere deine Wortkenntnisse heraus und versuche, den Galgenmann zu retten! Ich habe dieses Spiel für dich programmiert. Viel Spaß beim Spielen! (Dieser Text wurde mit ChatGPT generiert.)
+       The Hangman Challenge is an exciting word puzzle game where you have to guess a secret word by selecting the letters. You have only limited attempts and a limited time before the hangman is fully drawn. Challenge your word skills and try to save the hangman! I have programmed this game for you. Enjoy playing! 
     </p>
     
     <hr>
@@ -214,7 +214,7 @@
     <div class="form-div">
             <label for="myWord">
                 <strong>
-                    Wort festlegen:
+                   "Choose a word:"
                 </strong>
             </label>
             <br>
@@ -266,7 +266,7 @@
     <div class="secret-word">
         <p>
             <strong>
-                Du suchst das folgende Wort:
+You are looking for the following word:
             </strong>
         </p>
         <div id="hidden-characters">
@@ -280,7 +280,7 @@
     <div class="guess">
         <p>
             <i>
-                Klicke auf den Buchstaben um zu raten!
+                Click on the letter to make a guess!
             </i>
             <br>
             <strong>
@@ -303,7 +303,7 @@
         <hr>
 
         <button type="button" onclick="restartGame()">
-            Spiel Neu Starten
+           Restart the game!
         </button>
 
 
@@ -343,7 +343,7 @@
 
             myWordChars = [...myWord];
 
-            // leerzeichen und special chars nicht erlauben
+   
             for (let i=0;i<blockedChars.length;i++){
                 if(myWord.includes(blockedChars[i])){
                     wordCharsNotSuitable = true;
@@ -352,32 +352,25 @@
 
 
             if (wordLengthNotSuitable){
-                alert("Das Wort ist zu lang/zu kurz. Min 3 Max 20.");
+                alert("The word is too long/short. Min 3 Max 20.");
             }
             else if (wordCharsNotSuitable){
-                alert("Die eingegebenen Zeichen sind nicht erlaubt. Folgende Zeichen sind erlaubt: " + allowedChars);
+                alert("The entered characters are not allowed. Following characters are allowed: " + allowedChars);
             }
-            // ganz am ende damit zuerst alle fehlversuche getestet werden
+        
             else{
-                // debug lösungswort anzeigen
-                //document.getElementById('word').innerText = myWord;
-
-                // gesuchtes wort versteckt anzeigen
+         
                 displayWordChars(); 
                 
-                // für guessChar
+           
                 wordIsSet = true;
 
-                //Spiel und timer starten
                 startGame();
 
-                // input box leeren
                 document.getElementById('myWord').value = '';
             }
         }
 
-
-        // Gesuchtes Wort Buchstabe für Buchstabe anzeigen
         function displayWordChars(){
 
             let myText = '';
@@ -395,8 +388,7 @@
             let myText = '';
 
             for(let i=0;i<allowedChars.length;i++){
-                // backticks um einfacher zu escapen. variablen in geschweiften klammern
-                // myText += "    <button type='button' onclick='guessChar( \"  " +   allowedChars[i]  + "  \")'> "+  allowedChars[i]  + " </button>    ";
+                
                 myText +=`     <button type='button' onclick='guessChar("${allowedChars[i]}")'>${allowedChars[i]}</button>    `;
             }
 
@@ -410,61 +402,56 @@
             let guessResult = false;
 
             if( !wordIsSet ){
-                alert("Du musst zuerst ein Wort festlegen!")
+                alert("You must first choose a word!")
             }
             else{
-                // War das Raten erfolgreich?
+              
                 guessResult = myWord.includes(x);
 
-                // Meldung nur dann wenn wordIsSet
-                // richtig geraten
                 if(guessResult){
-                    document.getElementById("guessResultContainer").innerHTML = `Richtig geraten! Das gesuchte Wort enthält ${x}!<br>${triesMax - tries} Versuche noch…`;
-                    // den buchstaben überall wo er sich befindet anzeigen
-                    showChar(x);
+                    document.getElementById("guessResultContainer").innerHTML = `Correct guess! The sought word contains ${x}!<br>${triesMax - tries} Try again...`;
+                    
                 }
 
-                // falsch geraten
+            
                 else{
-                    // Versuche inkrementieren
+                   
                     tries++;
 
-                    document.getElementById("guessResultContainer").innerHTML = `Falsch geraten! Das gesuchte Wort enthält nicht ${x}!<br>${triesMax - tries} Versuche noch…`;
+                    document.getElementById("guessResultContainer").innerHTML = `Wrong guess! The sought word does not contain ${x}!<br>${triesMax - tries} Try again..`;
                     hangTheMan();
                 }
             }
 
         }
 
-        // zeigt den buchstaben überall an wo er sich befindet
+   
         function showChar(x){
-            // die indexe wo x vorhanden ist
+     
             let positions = [];
 
-            // indexe speichern
+ 
             for(let i=0;i<myWordChars.length;i++){
                 if(myWordChars[i] === x){
                     positions.push(i);
                 }
             }
 
-            // dort wo die indexe sind buchstabe anzeigen lassen
+    
             for (let i=0;i<positions.length;i++){
                 document.getElementById('hidden-characters').getElementsByClassName('char')[positions[i]].innerText = x;
             }
 
-            // nach jedem richigen raten kontrollieren ob alles geraten wurde
             CheckGuessedAll();
         }
 
-        // kontrollieren ob alles geraten wurde
-        // indem man guckt ob hidden characters voll ist
+     
         function CheckGuessedAll(){
             hiddenChars = [];
 
             let guessedAll = true;
 
-            // bereits erratene chars speicher in hiddenChars
+       
             for (let i=0;i<myWordChars.length;i++){
                 hiddenChars.push(  document.getElementById('hidden-characters').getElementsByClassName('char')[i].innerText   );
             }
@@ -484,9 +471,7 @@
             }
         }
 
-        // je nach anzahl des versuches den mann 
-        // schritt für schritt erhängen
-        // mit array
+     
         function hangTheMan(){
             let partToHang = "";
 
@@ -522,7 +507,7 @@
 
             theGameIsOver = true;
 
-            document.getElementById("guessResultContainer").innerHTML += `<br><span class="highlight-red">Du hast leider verloren! Das gesuchte Wort war "${myWord}"…</span>`;
+            document.getElementById("guessResultContainer").innerHTML += `<br><span class="highlight-red">Unfortunately, you have lost! The sought word was "${myWord}"…</span>`;
 
             hideAllowedCharsAndShowRestartButton();
            
@@ -538,7 +523,7 @@
             wonTheGame = true;
         }
 
-        // wenn spiel verloren oder gewonnen
+
         function hideAllowedCharsAndShowRestartButton() {
             document.getElementById('allowed-characters').style.display = 'none';
             document.getElementsByClassName('restart-section')[0].style.display = 'unset';
@@ -546,22 +531,20 @@
         }
 
         function restartGame() {
-            // lädt die Seite neu
+   
             location.reload();
         }
 
 
 
-        // Zeit in Minuten: Minute * Sekunden * Milisekunden
+
         let availableTime = 5 * 60 * 1000;
 
         function startGame() {
 
-            // wenn zeit abläuft game over
-            // gameOver timeOver parameter wird auf true gestellt
+     
             setTimeout( gameOver, availableTime, true );
 
-            // jede Sekunde wird verbleibende Zeit aktualisiert
             setInterval( myTimer, 1000);
         }
 
